@@ -4,5 +4,17 @@
   "description": "Persist data into various browser-based storage systems.",
   "main": "index.js",
   "author": "Sarah Dayan",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-jest": "^24.5.0",
+    "jest": "^24.5.0",
+    "jest-localstorage-mock": "^2.4.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ]
+  }
 }
