@@ -25,7 +25,9 @@ export default (
         data => set(namespace + key, data)
       )(value)
     },
-    remove,
+    remove(key) {
+      remove(namespace + key)
+    },
     clear
   }
 }

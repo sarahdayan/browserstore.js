@@ -26,4 +26,11 @@ describe('createStore', () => {
       expect(localStorage.getItem('browserstore_foo')).toBe('{"foo":"bar"}')
     })
   })
+  describe('#remove', () => {
+    test('remove data by namespaced key in the storage', () => {
+      localStorage.setItem('browserstore_foo', 'baz')
+      store.remove('foo')
+      expect(localStorage.getItem('browserstore_foo')).toBeNull()
+    })
+  })
 })
