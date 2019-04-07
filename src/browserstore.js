@@ -1,3 +1,10 @@
+/**
+ * @module browserstore
+ *
+ * @param {array} stores - The stores to sync.
+ *
+ * @returns {object}
+ */
 export default stores => {
   return {
     get(key) {

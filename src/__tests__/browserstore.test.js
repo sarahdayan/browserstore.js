@@ -14,7 +14,7 @@ beforeEach(() => {
   sessionStorage.clear()
 })
 
-describe('stores', () => {
+describe('browserstore', () => {
   describe('#get', () => {
     test('returns data from the first storage that has it', () => {
       localStorage.setItem('browserstore_foo', 'bar')
