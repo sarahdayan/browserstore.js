@@ -1,10 +1,8 @@
 import local from '../storages/local_storage'
 import session from '../storages/session_storage'
-import createStore from '../create_store'
+import { createStore, multiStore } from '../browserstore'
 
-import browserstore from '../browserstore'
-
-const stores = browserstore([
+const stores = multiStore([
   createStore(local, { namespace: 'browserstore_' }),
   createStore(session)
 ])
@@ -14,7 +12,7 @@ beforeEach(() => {
   sessionStorage.clear()
 })
 
-describe('browserstore', () => {
+describe('multiStore', () => {
   describe('#get', () => {
     test('returns data from the first storage that has it', () => {
       localStorage.setItem('browserstore_foo', 'bar')

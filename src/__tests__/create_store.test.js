@@ -1,5 +1,5 @@
 import local from '../storages/local_storage'
-import createStore from '../create_store'
+import { createStore } from '../browserstore'
 
 const store = createStore(local, { namespace: 'browserstore_' })
 
