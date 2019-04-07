@@ -1,10 +1,10 @@
-import local from '../storages/local_storage'
-import session from '../storages/session_storage'
+import localStorageAdapter from '../adapters/local_storage_adapter'
+import sessionStorageAdapter from '../adapters/session_storage_adapter'
 import { createStore, multiStore } from '../browserstore'
 
 const stores = multiStore([
-  createStore(local, { namespace: 'browserstore_' }),
-  createStore(session)
+  createStore(localStorageAdapter, { namespace: 'browserstore_' }),
+  createStore(sessionStorageAdapter)
 ])
 
 beforeEach(() => {

@@ -1,7 +1,7 @@
-import local from '../storages/local_storage'
+import localStorageAdapter from '../adapters/local_storage_adapter'
 import { createStore } from '../browserstore'
 
-const store = createStore(local, { namespace: 'browserstore_' })
+const store = createStore(localStorageAdapter, { namespace: 'browserstore_' })
 
 beforeEach(() => localStorage.clear())
 
