@@ -16,12 +16,12 @@ export default (
     get(key) {
       return pipe(
         key => get(namespace + key),
-        afterGet
+        ...(afterGet ? [afterGet] : [])
       )(key)
     },
     set(key, value) {
       return pipe(
-        beforeSet,
+        ...(beforeSet ? [beforeSet] : []),
         data => set(namespace + key, data)
       )(value)
     },

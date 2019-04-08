@@ -1,7 +1,12 @@
 import localStorageAdapter from '../adapters/local_storage_adapter'
 import { createStore } from '../browserstore'
 
+const localStorageAdapterNoTransforms = Object.assign({}, localStorageAdapter)
+delete localStorageAdapterNoTransforms.beforeSet
+delete localStorageAdapterNoTransforms.afterGet
+
 const store = createStore(localStorageAdapter, { namespace: 'browserstore_' })
+const storeNoTransforms = createStore(localStorageAdapterNoTransforms)
 
 beforeEach(() => localStorage.clear())
 
@@ -15,6 +20,10 @@ describe('createStore', () => {
       localStorage.setItem('browserstore_foo', '{"foo":"bar"}')
       expect(store.get('foo')).toEqual({ foo: 'bar' })
     })
+    test('works as expected when storage#afterGet is not implemented', () => {
+      localStorage.setItem('foo', 'baz')
+      expect(storeNoTransforms.get('foo')).toBe('baz')
+    })
   })
   describe('#set', () => {
     test('sets data by namespaced key in the storage', () => {
@@ -24,6 +33,10 @@ describe('createStore', () => {
     test('sets transformed data using storage#beforeSet', () => {
       store.set('foo', { foo: 'bar' })
       expect(localStorage.getItem('browserstore_foo')).toBe('{"foo":"bar"}')
+    })
+    test('works as expected when storage#beforeSet is not implemented', () => {
+      storeNoTransforms.set('foo', 'bar')
+      expect(localStorage.getItem('foo')).toBe('bar')
     })
   })
   describe('#remove', () => {
