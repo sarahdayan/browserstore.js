@@ -2,13 +2,15 @@
   "name": "browserstore",
   "version": "0.1.0",
   "description": "Persist data into various browser-based storage systems.",
-  "main": "index.js",
   "author": "Sarah Dayan",
   "license": "MIT",
+  "main": "build/cjs/browserstore.js",
+  "module": "build/esm/browserstore.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src",
-    "lint!": "yarn lint --fix"
+    "lint!": "yarn lint --fix",
+    "build": "rm -rf build && node scripts/build"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -16,7 +18,10 @@
     "babel-jest": "^24.5.0",
     "eslint": "^5.16.0",
     "jest": "^24.5.0",
-    "jest-localstorage-mock": "^2.4.0"
+    "jest-localstorage-mock": "^2.4.0",
+    "rollup": "^1.9.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-babel-minify": "^8.0.0"
   },
   "jest": {
     "setupFiles": [
