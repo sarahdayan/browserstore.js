@@ -149,6 +149,29 @@ stores.get('language') // returns 'fr-FR', as urlStore is the first store
 
 If a multi-store doesn't find a value in a store, it moves on to the next until it finds it.
 
+## Building your own adapter
+
+You can make your own adapter by creating an object that implements the following methods:
+
+```js
+const myStorage = {
+  get: key => /* return data from storage */,
+  set: (key, value) => /* persist data into storage */,
+  remove: key => /* remove data from storage */,
+  clear: () => /* clear storage */,
+  afterGet: data => /* manipulate data after getting it */,
+  beforeSet: data => /* manipulate data before setting it */
+}
+
+const myStore = createStore(myStorage)
+```
+
+### What's the point of the afterGet and beforeSet methods?
+
+You can use the `afterGet` and `beforeSet` methods to transform data, respectively after you get data from the storage (and before returning it) and before setting data into the storage. In some cases, like with the `localStorage`, this can be useful to stringify and unstringify data.
+
+Keeping data transformation separate from interfacing with the storage system makes things easier to test. If you don't need to transform data, don't add the `afterGet` and `beforeSet` methods to your adapter.
+
 ## How different is BrowserStore from Store.js?
 
 [Store.js][github:store] is a fantastic project which focuses on storing data, whatever the browser of the end user. It supports older browsers (down to IE6). However, it doesn't let you sync data over several storage systems, or explore them sequentially to retrieve data. That's where BrowserStore steps in.
