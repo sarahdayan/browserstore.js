@@ -29,7 +29,7 @@ Include BrowserStore in a script tag and access its methods through the global `
 ### CommonJS (Node)
 
 ```js
-const adapters = require('browserstore/adapters')
+const adapter = require('browserstore/adapters/path/to/adapter')
 const { createStore } = require('browserstore')
 ```
 
@@ -44,7 +44,7 @@ requirejs(['path/to/amd/browserstore'], function(browserstore) {
 ### ES modules (modern browsers, Webpack, etc.)
 
 ```js
-import * as adapters from 'browserstore/adapters'
+import adapter from 'browserstore/adapters/path/to/adapter'
 import { createStore } from 'browserstore'
 ```
 
