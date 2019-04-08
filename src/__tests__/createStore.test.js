@@ -1,4 +1,4 @@
-import localStorageAdapter from '../adapters/local_storage_adapter'
+import localStorageAdapter from '../adapters/localStorage'
 import { createStore } from '../browserstore'
 
 const localStorageAdapterNoTransforms = Object.assign({}, localStorageAdapter)

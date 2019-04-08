@@ -34,27 +34,27 @@ const modules = [
     builds: ['cjs', 'umd', 'amd', 'es']
   },
   {
-    path: 'src/create_store.js',
+    path: 'src/createStore.js',
     plugins: [...pluginSetups.default],
-    dest: 'lite/create_store',
+    dest: 'lite/createStore',
     builds: ['umd', 'amd']
   },
   {
-    path: 'src/multi_store.js',
+    path: 'src/multiStore.js',
     plugins: [...pluginSetups.default],
-    dest: 'lite/multi_store',
+    dest: 'lite/multiStore',
     builds: ['umd', 'amd']
   },
   {
-    path: 'src/adapters/local_storage_adapter.js',
+    path: 'src/adapters/localStorage.js',
     plugins: [...pluginSetups.default],
-    dest: 'adapters/local_storage_adapter',
+    dest: 'adapters/localStorage',
     builds: ['cjs', 'umd', 'amd', 'es']
   },
   {
-    path: 'src/adapters/session_storage_adapter.js',
+    path: 'src/adapters/sessionStorage.js',
     plugins: [...pluginSetups.default],
-    dest: 'adapters/session_storage_adapter',
+    dest: 'adapters/sessionStorage',
     builds: ['cjs', 'umd', 'amd', 'es']
   }
 ]

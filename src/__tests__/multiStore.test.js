@@ -1,5 +1,5 @@
-import localStorageAdapter from '../adapters/local_storage_adapter'
-import sessionStorageAdapter from '../adapters/session_storage_adapter'
+import localStorageAdapter from '../adapters/localStorage'
+import sessionStorageAdapter from '../adapters/sessionStorage'
 import { createStore, multiStore } from '../browserstore'
 
 const stores = multiStore([

@@ -69,7 +69,7 @@ To create a store, you need to import an adapter and wrap it into a store. Adapt
 Here, we're importing the `localStorageAdapter` adapter (which communicates with the browser's `localStorage`) and creating a store out of it using the `createStore` factory.
 
 ```js
-import localStorageAdapter from 'browserstore/adapters/local_storage_adapter'
+import localStorageAdapter from 'browserstore/adapters/localStorage'
 import { createStore } from 'browserstore'
 
 const store = createStore(localStorageAdapter)
@@ -78,7 +78,7 @@ const store = createStore(localStorageAdapter)
 In the UMD and AMD builds, adapters don't come bundled under the `browserstore` namespace, you have to import them manually.
 
 ```html
-<script src="path/to/umd/adapters/local_storage_adapter.js"></script>
+<script src="path/to/umd/adapters/localStorage.js"></script>
 <script src="path/to/umd/browserstore.js"></script>
 <script>
   const store = browserstore.createStore(localStorageAdapter)
@@ -115,8 +115,8 @@ store.remove('foo') // removes 'browserstore_foo'
 The highlight of BrowserStore is its ability to create multi-stores. Multi-stores let you call methods the same way as if you were using a single store but performs it on several stores at a time.
 
 ```js
-import localStorageAdapter from 'browserstore/adapters/local_storage_adapter'
-import sessionStorageAdapter from 'browserstore/adapters/session_storage_adapter'
+import localStorageAdapter from 'browserstore/adapters/localStorage'
+import sessionStorageAdapter from 'browserstore/adapters/sessionStorage'
 import { createStore, multiStore } from 'browserstore'
 
 const stores = multiStore([
@@ -132,8 +132,8 @@ When retrieving data from a multi-store, BrowserStore looks them up in order. As
 Imagine you store data in the `localStorage` and the URL. Whenever a piece of data is in the URL, it should prevail over any data the user has in its `localStorage`. For example, a user may have a language saved in their `localStorage` from a previous visit, but you want to explicitly redirect them to a page in a specific language regardless of their preferences. Without a hierarchical lookup system, you'd have to implement some imperative conditional system. With BrowserStore, you get a declarative syntax which keeps your code clean.
 
 ```js
-import localStorageAdapter from 'browserstore/adapters/local_storage_adapter'
-import sessionStorageAdapter from 'browserstore/adapters/session_storage_adapter'
+import localStorageAdapter from 'browserstore/adapters/localStorage'
+import sessionStorageAdapter from 'browserstore/adapters/sessionStorage'
 import { createStore, multiStore } from 'browserstore'
 
 const localStore = createStore(localStorageAdapter)

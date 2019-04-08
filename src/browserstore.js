@@ -1,4 +1,4 @@
-import createStore from './create_store'
-import multiStore from './multi_store'
+import createStore from './createStore'
+import multiStore from './multiStore'
 
 export { createStore, multiStore }
