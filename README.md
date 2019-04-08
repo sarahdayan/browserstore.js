@@ -33,7 +33,7 @@ const adapters = require('browserstore/adapters')
 const { createStore } = require('browserstore')
 ```
 
-### AMD (RequireJS, System.js, etc.)
+### AMD (RequireJS, SystemJS, etc.)
 
 ```js
 requirejs(['path/to/amd/browserstore'], function(browserstore) {
