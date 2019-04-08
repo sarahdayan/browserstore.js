@@ -1,6 +1,4 @@
-import url from '../url'
-
-const urlAdapter = url()
+import urlAdapter from '../url'
 
 const getParams = () =>
   new URLSearchParams(new URL(window.location.href).search)
