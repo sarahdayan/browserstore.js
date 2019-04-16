@@ -11,11 +11,11 @@ BrowserStore provides builds for different environments.
 The recommended way of install is via [npm][npm] or [Yarn][yarn]:
 
 ```bash
-npm install browserstore
+npm install browserstore.js
 
 // or
 
-yarn add browserstore
+yarn add browserstore.js
 ```
 
 ### UMD (browser global)
