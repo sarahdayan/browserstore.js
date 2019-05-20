@@ -1,3 +1,6 @@
 node_modules
 coverage
-build
+es
+umd
+cjs
+amd

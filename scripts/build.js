@@ -97,7 +97,7 @@ const outputs = [
   },
   {
     format: 'es',
-    folder: 'esm'
+    folder: 'es'
   }
 ]
 
@@ -117,7 +117,7 @@ const buildOutputs = ({ bundle, builds, path = '', name } = {}) => {
   outputs.forEach(({ folder, format }) => {
     if (builds.includes(format)) {
       bundle.write({
-        file: `build/${folder}/${path}.js`,
+        file: `${folder}/${path}.js`,
         format,
         name
       })

@@ -1,17 +1,23 @@
 {
   "name": "browserstore.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Persist data into various browser-based storage systems.",
   "author": "Sarah Dayan",
   "license": "MIT",
-  "main": "build/cjs/browserstore.js",
-  "module": "build/esm/browserstore.js",
+  "main": "cjs/browserstore.js",
+  "module": "es/browserstore.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src",
     "lint!": "yarn lint --fix",
     "build": "rm -rf build && node scripts/build"
   },
+  "files": [
+    "es",
+    "umd",
+    "cjs",
+    "amd"
+  ],
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
