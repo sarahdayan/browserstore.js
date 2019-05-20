@@ -65,7 +65,7 @@ import { createStore } from 'browserstore'
 const store = createStore(localStorageAdapter)
 ```
 
-In the UMD and AMD builds, adapters don't come bundled under the `browserstore` namespace, you have to import them manually.
+In the UMD and AMD builds, adapters don't come bundled under the `browserstore` namespace; you have to import them manually.
 
 ```html
 <script src="path/to/umd/adapters/localStorage.js"></script>
