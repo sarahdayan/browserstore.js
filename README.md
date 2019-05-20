@@ -162,16 +162,16 @@ store.set('userID', 12345)
 store.set('desktopNotifications', false)
 
 // with an array
-store.set['wishlist', [
+store.set('wishlist', [
   {
-    title: 'Harry Potter and the Sorcerer's Stone',
+    title: "Harry Potter and the Sorcerer's Stone",
     author: 'J.K. Rowling'
   },
   {
     title: 'The Catcher in the Rye',
     author: 'J.D. Salinger'
   }
-]]
+])
 
 // with an object
 store.set('user', {
