@@ -233,7 +233,7 @@ For this reason, the standard UMD and AMD builds expose the whole core library u
 
 If you're using the standard UMD or AMD build, you need to access the core features on the `browserstore` namespace. If you're using the Node.js or ESM build, you can access them directly.
 
-**Note**: not using a build step shouldn't penalize you with extra bytes you don't need. For that reason, you also have access to lite builds. They provide atomic modules for you to import manually. The tradeoff is more HTTP calls, but you're shipping smaller files to the end users.
+**Note**: not using a build step shouldn't penalize you with extra bytes you don't need. For that reason, you also have access to lite builds. They provide atomic modules for you to import manually. The trade-off is more HTTP calls, but you're shipping smaller files to the end users.
 
 ## How different is BrowserStore from Store.js?
 
