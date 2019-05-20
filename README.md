@@ -48,16 +48,6 @@ import adapter from 'browserstore/es/adapters/path/to/adapter'
 import { createStore } from 'browserstore'
 ```
 
-### The architecture of BrowserStore
-
-BrowserStore is built with modularity in mind. Yet, this isn't always practical depending on your use case and your environment. For instance, if you're using a library right in the browser with a `<script>` tag, it's easier to access everything from a global namespace. However, if you're in a Node environment, or if you have a build step in your pipeline, importing the library piece by piece is much more idiomatic.
-
-For this reason, the standard UMD and AMD builds expose the whole core library under a global `browserstore` variable. The CommonJS and ESM builds let you import only what you need (so you can leverage tree-shaking).
-
-If you're using the standard UMD or AMD build, you need to access the core features on the `browserstore` namespace. If you're using the Node.js or ESM build, you can access them directly. **The documentation illustrates examples using the latter, but keep your own usage in mind while following it.**
-
-**Note**: not using a build step shouldn't penalize you with extra bytes you don't need. For that reason, you also have access to lite builds. They provide atomic modules for you to import manually. The tradeoff is more HTTP calls, but you're shipping smaller files to the end users.
-
 ## Quick start
 
 ### Create a store
@@ -88,12 +78,16 @@ In the UMD and AMD builds, adapters don't come bundled under the `browserstore` 
 You can now use your store to interact with your storage system.
 
 ```js
-store.set('foo', 'bar') // sets value 'bar' as 'foo' in the localStorage
-store.set('baz', 'quux')
+store.set('userID', 12345) // sets value 'userID' as 12345 in the localStorage
 
-store.get('foo') // returns 'bar'
+store.set('user', {
+  name: 'Sarah',
+  id: 12345
+})
 
-store.remove('foo') // removes 'foo'
+store.get('userID') // returns 12345
+
+store.remove('user') // removes 'user'
 
 store.clear() // clears the localStorage
 ```
@@ -105,9 +99,9 @@ For example, let's say you want to namespace the data you store, to avoid name c
 ```js
 const store = createStore(localStorageAdapter, { namespace: 'browserstore_' })
 
-store.set('foo', 'bar') // sets value 'bar' as 'browserstore_foo'
-store.get('foo') // returns 'bar' by key 'browserstore_foo'
-store.remove('foo') // removes 'browserstore_foo'
+store.set('userID', 12345) // sets value 12345 as 'browserstore_userID'
+store.get('userID') // returns 12345 by key 'browserstore_userID'
+store.remove('userID') // removes 'browserstore_userID'
 ```
 
 ### Create a multi-store
@@ -124,7 +118,7 @@ const stores = multiStore([
   createStore(sessionStorageAdapter)
 ])
 
-stores.set('foo', 'bar') // sets value 'bar' as 'foo' in the localStorage and sessionStorage
+stores.set('userID', 12345) // sets value 'userID' as 12345 in both localStorage and sessionStorage
 ```
 
 When retrieving data from a multi-store, BrowserStore looks them up in order. As soon as it finds data, it stops and returns it. This behavior is particularly useful if you're updating stores independently, and you want to set some hierarchy in data retrieval.
@@ -149,6 +143,71 @@ stores.get('language') // returns 'fr-FR', as urlStore is the first store
 
 If a multi-store doesn't find a value in a store, it moves on to the next until it finds it.
 
+## API
+
+### `set()`
+
+Save data to storage.
+
+You can pass strings, number, booleans, arrays or objects without worrying about stringifiying them first. BrowserStore handles it for you.
+
+```js
+// with a string
+store.set('mode', 'dark')
+
+// with a number
+store.set('userID', 12345)
+
+// with a boolean
+store.set('desktopNotifications', false)
+
+// with an array
+store.set['wishlist', [
+  {
+    title: 'Harry Potter and the Sorcerer's Stone',
+    author: 'J.K. Rowling'
+  },
+  {
+    title: 'The Catcher in the Rye',
+    author: 'J.D. Salinger'
+  }
+]]
+
+// with an object
+store.set('user', {
+  name: 'Sarah',
+  id: 12345
+})
+```
+
+### `get()`
+
+Get data from storage.
+
+If the library doesn't find anything, it returns `null`.
+
+```js
+store.get('mode') // returns 'dark'
+
+store.get('password') // returns null
+```
+
+### `remove()`
+
+Remove data from storage.
+
+```js
+store.remove('user') // removes 'user' from storage
+```
+
+### `clear()`
+
+Clear all data from storage.
+
+```js
+store.clear() // removes everything from storage
+```
+
 ## Building your own adapter
 
 You can make your own adapter by creating an object that implements the following methods:
@@ -166,11 +225,15 @@ const myStorage = {
 const myStore = createStore(myStorage)
 ```
 
-### What's the point of the afterGet and beforeSet methods?
+## Using BrowserStore in different environments
 
-You can use the `afterGet` and `beforeSet` methods to transform data, respectively after you get data from the storage (and before returning it) and before setting data into the storage. In some cases, like with the `localStorage`, this can be useful to stringify and unstringify data.
+BrowserStore is built with modularity in mind. Yet, this isn't always practical depending on your use case and your environment. For instance, if you're using a library right in the browser with a `<script>` tag, it's easier to access everything from a global namespace. However, if you're in a Node environment, or if you have a build step in your pipeline, importing the library piece by piece is much more idiomatic.
 
-Keeping data transformation separate from interfacing with the storage system makes things easier to test. If you don't need to transform data, don't add the `afterGet` and `beforeSet` methods to your adapter.
+For this reason, the standard UMD and AMD builds expose the whole core library under a global `browserstore` variable. The CommonJS and ESM builds let you import only what you need (so you can leverage tree-shaking).
+
+If you're using the standard UMD or AMD build, you need to access the core features on the `browserstore` namespace. If you're using the Node.js or ESM build, you can access them directly.
+
+**Note**: not using a build step shouldn't penalize you with extra bytes you don't need. For that reason, you also have access to lite builds. They provide atomic modules for you to import manually. The tradeoff is more HTTP calls, but you're shipping smaller files to the end users.
 
 ## How different is BrowserStore from Store.js?
 
@@ -182,7 +245,7 @@ In a nutshell, Store.js and BrowserStore serve the same general purpose, but wit
 
 ## Acknowledgements
 
-Design-wise, BrowserStore draws inspiration from [Luxon][luxon] and [Store.js][github:store]. Props to their author for the fantastic job they did.
+Design-wise, BrowserStore draws inspiration from [Luxon][luxon] and [Store.js][github:store]. Props to their authors for the fantastic job they did.
 
 ## License
 
