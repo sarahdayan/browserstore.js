@@ -10,7 +10,7 @@
     "test": "jest",
     "lint": "eslint src",
     "lint!": "yarn lint --fix",
-    "build": "rm -rf build && node scripts/build"
+    "build": "rm -rf amd && rm -rf cjs && rm -rf es && rm -rf umd && node scripts/build"
   },
   "files": [
     "es",
