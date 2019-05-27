@@ -141,14 +141,24 @@ If a multi-store doesn't find a value in a store, it moves on to the next until 
 
 If you want a certain store to only persist a subset of your data, you can leverage the `ignore` option to filter unwanted data out. This is useful when you want to set data, but not in all stores. A good example is when you're using the `urlAdapter` adapter: you may not need everything to be visible in the URL.
 
+Alternatively, you can use the `only` option to selectively pick what to persist. This is a good alternative to `ignore` when you know exactly what you want to keep and want to filter put everything else.
+
 ```js
-const localStore = createStore(localStorageAdapter)
-const urlStore = createStore(urlAdapter, { ignore: ['userID'] })
+const localStore = createStore(localStorageAdapter, { ignore: ['password'] })
+const urlStore = createStore(urlAdapter, { only: ['language'] })
 
 const stores = multiStore([urlStore, localStore])
 
-stores.set('language', 'fr-FR') // changes the URL into as yourdomain.com?language=fr-FR
-stores.set('userID', 12345) // does not further alter the URL, but sets 'userID' in the localStore
+// sets the 'language' in the localStore
+// and in the urlStore (changing the URL into yourdomain.com?language=fr-FR)
+stores.set('language', 'fr-FR')
+
+// sets 'userID' in the localStore
+// but not in the urlStore (therefore does not alter the URL)
+stores.set('userID', 12345)
+
+// does not set 'password' anywhere
+stores.set('password', '$3cR3t')
 ```
 
 ## API
@@ -238,6 +248,20 @@ const store = createStore(adapter, { ignore: ['userID'] })
 
 store.set('userID', 12345) // does not set anything
 store.get('userID') // returns null
+```
+
+### `only`
+
+An array of keys to take into account exclusively.
+
+```js
+const store = createStore(adapter, { only: ['language'] })
+
+store.set('language', 'fr-FR') // sets 'language' in the store
+store.set('password', '$3cR3t') // does not set anything
+
+store.get('language') // 'fr-FR'
+store.get('password') // returns null
 ```
 
 ## Building your own adapter

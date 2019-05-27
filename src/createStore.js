@@ -7,6 +7,7 @@ import pipe from './utils/pipe'
  * @param {object} [options] - An object of options.
  * @param {string} [options.namespace] - A namespace to prefix keys.
  * @param {string[]} [options.ignore] - An array of keys to ignore.
+ * @param {string[]} [options.only] - An array of keys to take into account exclusively.
  *
  * @returns {store}
  */
