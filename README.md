@@ -126,22 +126,30 @@ When retrieving data from a multi-store, BrowserStore looks them up in order. As
 Imagine you store data in the `localStorage` and the URL. Whenever a piece of data is in the URL, it should prevail over any data the user has in its `localStorage`. For example, a user may have a language saved in their `localStorage` from a previous visit, but you want to explicitly redirect them to a page in a specific language regardless of their preferences. Without a hierarchical lookup system, you'd have to implement some imperative conditional system. With BrowserStore, you get a declarative syntax which keeps your code clean.
 
 ```js
-import localStorageAdapter from 'browserstore.js/es/adapters/localStorage'
-import sessionStorageAdapter from 'browserstore.js/es/adapters/sessionStorage'
-import { createStore, multiStore } from 'browserstore.js'
-
 const localStore = createStore(localStorageAdapter)
-const urlStore = createStore(sessionStorageAdapter)
+const sessionStore = createStore(sessionStorageAdapter)
 
-const stores = multiStore([urlStore, localStore])
+const stores = multiStore([sessionStore, localStore])
 
 stores.set('language', 'en-US') // sets 'language' in both stores
-urlStore.set('language', 'fr-FR') // sets a new 'language' in the urlStore only
+sessionStore.set('language', 'fr-FR') // sets a new 'language' in the sessionStore only
 
-stores.get('language') // returns 'fr-FR', as urlStore is the first store
+stores.get('language') // returns 'fr-FR', as sessionStore is the first store
 ```
 
 If a multi-store doesn't find a value in a store, it moves on to the next until it finds it.
+
+If you want a certain store to only persist a subset of your data, you can leverage the `ignore` option to filter them out. This is useful when you want to persist some data, but not in all stores. A good example is when you're using the `urlAdapter` adapter: you may not need everything to be persisted (and visible) in the URL.
+
+```js
+const localStore = createStore(localStorageAdapter)
+const urlStore = createStore(urlAdapter, { ignore: ['userID'] })
+
+const stores = multiStore([urlStore, localStore])
+
+stores.set('language', 'fr-FR') // changes the URL into as yourdomain.com?language=fr-FR
+stores.set('userID', 12345) // does not further alter the URL, but sets 'userID' in the localStore
+```
 
 ## API
 
@@ -206,6 +214,30 @@ Clear all data from storage.
 
 ```js
 store.clear() // removes everything from storage
+```
+
+## Options
+
+### `namespace`
+
+A namespace to prefix keys.
+
+```js
+const store = createStore(adapter, { namespace: 'browserstore_' })
+
+store.set('mode', 'dark') // sets the key as 'browserstore_mode'
+store.get('mode') // returns the data for key 'browserstore_mode'
+```
+
+### `ignore`
+
+An array of keys to ignore.
+
+```js
+const store = createStore(adapter, { ignore: ['userID'] })
+
+store.set('userID', 12345) // does not set anything
+store.get('userID') // returns null
 ```
 
 ## Building your own adapter

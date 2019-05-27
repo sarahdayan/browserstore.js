@@ -1,7 +1,7 @@
 /**
  * Creates a multi-store
  *
- * @param {array} stores - The stores to sync.
+ * @param {store[]} stores - The stores to sync.
  *
  * @returns {object}
  */

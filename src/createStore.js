@@ -4,7 +4,9 @@ import pipe from './utils/pipe'
  * Creates store from storage object
  *
  * @param {storage} storage - An object that implements storage methods.
- * @param {object} options - An object of options.
+ * @param {object} [options] - An object of options.
+ * @param {string} [options.namespace] - A namespace to prefix keys.
+ * @param {string[]} [options.ignore] - An array of keys to ignore.
  *
  * @returns {store}
  */
