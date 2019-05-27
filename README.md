@@ -139,7 +139,7 @@ stores.get('language') // returns 'fr-FR', as sessionStore is the first store
 
 If a multi-store doesn't find a value in a store, it moves on to the next until it finds it.
 
-If you want a certain store to only persist a subset of your data, you can leverage the `ignore` option to filter them out. This is useful when you want to persist some data, but not in all stores. A good example is when you're using the `urlAdapter` adapter: you may not need everything to be persisted (and visible) in the URL.
+If you want a certain store to only persist a subset of your data, you can leverage the `ignore` option to filter unwanted data out. This is useful when you want to set data, but not in all stores. A good example is when you're using the `urlAdapter` adapter: you may not need everything to be visible in the URL.
 
 ```js
 const localStore = createStore(localStorageAdapter)
