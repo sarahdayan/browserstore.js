@@ -10,8 +10,10 @@ import pipe from './utils/pipe'
  */
 export default (
   { get, set, remove, clear, afterGet, beforeSet },
-  { namespace = '' } = {}
+  { namespace = '', ignore = [] } = {}
 ) => {
+  const shouldIgnore = key => ignore.includes(key)
+
   return {
     get(key) {
       return pipe(
@@ -22,7 +24,7 @@ export default (
     set(key, value) {
       return pipe(
         ...(beforeSet ? [beforeSet] : []),
-        data => set(namespace + key, data)
+        data => (shouldIgnore(key) ? () => {} : set(namespace + key, data))
       )(value)
     },
     remove(key) {

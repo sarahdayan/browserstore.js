@@ -4,7 +4,7 @@ import { createStore, multiStore } from '../browserstore'
 
 const stores = multiStore([
   createStore(localStorageAdapter, { namespace: 'browserstore_' }),
-  createStore(sessionStorageAdapter)
+  createStore(sessionStorageAdapter, { ignore: ['bar'] })
 ])
 
 beforeEach(() => {
@@ -28,8 +28,11 @@ describe('multiStore', () => {
   describe('#set', () => {
     test('sets data in every store according to their respective rules', () => {
       stores.set('foo', 'bar')
+      stores.set('bar', 'baz')
       expect(localStorage.getItem('browserstore_foo')).toBe('bar')
+      expect(localStorage.getItem('browserstore_bar')).toBe('baz')
       expect(sessionStorage.getItem('foo')).toBe('bar')
+      expect(sessionStorage.getItem('bar')).toBeNull()
     })
   })
   describe('#remove', () => {

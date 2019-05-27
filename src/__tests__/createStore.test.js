@@ -7,6 +7,9 @@ delete localStorageAdapterNoTransforms.afterGet
 
 const store = createStore(localStorageAdapter, { namespace: 'browserstore_' })
 const storeNoTransforms = createStore(localStorageAdapterNoTransforms)
+const storeWithIgnore = createStore(localStorageAdapter, {
+  ignore: ['bar', 'baz']
+})
 
 beforeEach(() => localStorage.clear())
 
@@ -37,6 +40,14 @@ describe('createStore', () => {
     test('works as expected when storage#beforeSet is not implemented', () => {
       storeNoTransforms.set('foo', 'bar')
       expect(localStorage.getItem('foo')).toBe('bar')
+    })
+    test('does not set ignored data in the storage', () => {
+      storeWithIgnore.set('foo', 'bar')
+      storeWithIgnore.set('bar', 'baz')
+      storeWithIgnore.set('baz', 'qux')
+      expect(localStorage.getItem('foo')).not.toBeNull()
+      expect(localStorage.getItem('bar')).toBeNull()
+      expect(localStorage.getItem('baz')).toBeNull()
     })
   })
   describe('#remove', () => {
