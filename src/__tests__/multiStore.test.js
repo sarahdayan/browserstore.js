@@ -1,15 +1,21 @@
 import localStorageAdapter from '../adapters/localStorage'
 import sessionStorageAdapter from '../adapters/sessionStorage'
+import urlAdapter from '../adapters/url'
 import { createStore, multiStore } from '../browserstore'
+
+const getParams = () =>
+  new URLSearchParams(new URL(window.location.href).search)
 
 const stores = multiStore([
   createStore(localStorageAdapter, { namespace: 'browserstore_' }),
-  createStore(sessionStorageAdapter, { ignore: ['bar'] })
+  createStore(sessionStorageAdapter, { ignore: ['bar'] }),
+  createStore(urlAdapter, { only: ['foo'] })
 ])
 
 beforeEach(() => {
   localStorage.clear()
   sessionStorage.clear()
+  window.history.pushState({}, '', window.location.pathname)
 })
 
 describe('multiStore', () => {
@@ -33,6 +39,8 @@ describe('multiStore', () => {
       expect(localStorage.getItem('browserstore_bar')).toBe('baz')
       expect(sessionStorage.getItem('foo')).toBe('bar')
       expect(sessionStorage.getItem('bar')).toBeNull()
+      expect(getParams().get('foo')).toBe('bar')
+      expect(getParams().get('bar')).toBeNull()
     })
   })
   describe('#remove', () => {

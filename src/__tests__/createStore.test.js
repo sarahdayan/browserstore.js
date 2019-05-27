@@ -5,11 +5,13 @@ const localStorageAdapterNoTransforms = { ...localStorageAdapter }
 delete localStorageAdapterNoTransforms.beforeSet
 delete localStorageAdapterNoTransforms.afterGet
 
-const store = createStore(localStorageAdapter, { namespace: 'browserstore_' })
+const storeFactory = options => createStore(localStorageAdapter, options)
+
+const store = storeFactory({ namespace: 'browserstore_' })
 const storeNoTransforms = createStore(localStorageAdapterNoTransforms)
-const storeWithIgnore = createStore(localStorageAdapter, {
-  ignore: ['bar', 'baz']
-})
+const storeWithIgnore = storeFactory({ ignore: ['bar', 'baz'] })
+const storeWithOnly = storeFactory({ only: ['foo'] })
+const storeWithConflicts = storeFactory({ only: ['bar'], ignore: ['bar'] })
 
 beforeEach(() => localStorage.clear())
 
@@ -46,6 +48,22 @@ describe('createStore', () => {
       storeWithIgnore.set('bar', 'baz')
       storeWithIgnore.set('baz', 'qux')
       expect(localStorage.getItem('foo')).not.toBeNull()
+      expect(localStorage.getItem('bar')).toBeNull()
+      expect(localStorage.getItem('baz')).toBeNull()
+    })
+    test('only sets selected data in the storage', () => {
+      storeWithOnly.set('foo', 'bar')
+      storeWithOnly.set('bar', 'baz')
+      storeWithOnly.set('baz', 'qux')
+      expect(localStorage.getItem('foo')).not.toBeNull()
+      expect(localStorage.getItem('bar')).toBeNull()
+      expect(localStorage.getItem('baz')).toBeNull()
+    })
+    test('gives precedence to ignore when there are conflicts with only', () => {
+      storeWithConflicts.set('foo', 'bar')
+      storeWithConflicts.set('bar', 'baz')
+      storeWithConflicts.set('baz', 'qux')
+      expect(localStorage.getItem('foo')).toBeNull()
       expect(localStorage.getItem('bar')).toBeNull()
       expect(localStorage.getItem('baz')).toBeNull()
     })

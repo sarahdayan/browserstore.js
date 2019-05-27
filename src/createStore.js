@@ -12,9 +12,13 @@ import pipe from './utils/pipe'
  */
 export default (
   { get, set, remove, clear, afterGet, beforeSet },
-  { namespace = '', ignore = [] } = {}
+  { namespace = '', ignore = [], only = [] } = {}
 ) => {
-  const shouldIgnore = key => ignore.includes(key)
+  const shouldIgnore = key => {
+    const inIgnoreList = ignore.includes(key)
+    const inOnlyList = only.length && !only.includes(key)
+    return inIgnoreList ? inIgnoreList : inOnlyList
+  }
 
   return {
     get(key) {
