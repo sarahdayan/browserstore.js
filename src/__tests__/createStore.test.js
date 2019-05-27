@@ -1,7 +1,7 @@
 import localStorageAdapter from '../adapters/localStorage'
 import { createStore } from '../browserstore'
 
-const localStorageAdapterNoTransforms = Object.assign({}, localStorageAdapter)
+const localStorageAdapterNoTransforms = { ...localStorageAdapter }
 delete localStorageAdapterNoTransforms.beforeSet
 delete localStorageAdapterNoTransforms.afterGet
 
