@@ -20,6 +20,21 @@ describe('URL', () => {
         urlAdapter.set('bar', 'baz')
         expect(getParams().get('bar')).toBe('baz')
       })
+
+      test('keeps the url hash when setting data', () => {
+        window.history.pushState({}, 'hash_url', '/url/#hash')
+        urlAdapter.set('foo', 'bar')
+
+        expect(window.location.href).toEqual('http://localhost/url/#hash?foo=bar')
+
+        // We have to reset the window location to prevent other tests from having the /url/#hash as active location
+        window.history.pushState({}, 'hash_url', '/')
+      })
+
+      test('does not add the hash when setting data if no hash is present', () => {
+        urlAdapter.set('foo', 'bar')
+        expect(window.location.href).toEqual('http://localhost/?foo=bar')
+      })
     })
     describe('#remove', () => {
       test('removes data by key from storage', () => {

@@ -6,7 +6,7 @@ const persistPipe = fn =>
   pipe(
     fn,
     (params = '') =>
-      window.history.pushState({}, '', `${window.location.pathname}?${params}`)
+      window.history.pushState({}, '', `${window.location.pathname}${window.location.hash}?${params}`)
   )(getParams())
 
 export default {
