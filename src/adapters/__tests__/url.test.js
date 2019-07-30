@@ -2,10 +2,15 @@ import urlAdapter from '../url'
 
 const getParams = () =>
   new URLSearchParams(new URL(window.location.href).search)
+const getHash = () =>
+  window.location.hash
 const persist = (params = '') =>
   window.history.pushState({}, '', `${window.location.pathname}?${params}`)
+const resetURL = () =>
+  window.history.pushState({}, '', '/')
 
 beforeEach(() => persist())
+afterEach(() => resetURL())
 
 describe('URL', () => {
   describe('#get', () => {
@@ -23,14 +28,11 @@ describe('URL', () => {
       test('keeps the URL hash when setting data', () => {
         window.history.pushState({}, '', '/url/#hash')
         urlAdapter.set('foo', 'bar')
-        expect(window.location.href).toEqual('http://localhost/url/#hash?foo=bar')
-
-        // We have to reset the window location to prevent other tests from having the /url/#hash as active location
-        window.history.pushState({}, '', '/')
+        expect(getHash()).toEqual('#hash')
       })
       test('does not add the hash when setting data if no hash is present', () => {
         urlAdapter.set('foo', 'bar')
-        expect(window.location.href).toEqual('http://localhost/?foo=bar')
+        expect(getHash()).toEqual('')
       })
     })
     describe('#remove', () => {
