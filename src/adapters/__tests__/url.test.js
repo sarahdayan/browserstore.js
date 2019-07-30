@@ -5,9 +5,11 @@ const getParams = () =>
 const getHash = () =>
   window.location.hash
 const persist = (params = '') =>
-  window.history.pushState({}, '', `${window.location.pathname}?${params}`)
+  setActiveURL(`${window.location.pathname}?${params}`)
 const resetURL = () =>
-  window.history.pushState({}, '', '/')
+  setActiveURL('/')
+const setActiveURL =  (url) =>
+  window.history.pushState({}, '', url)
 
 beforeEach(() => persist())
 afterEach(() => resetURL())
@@ -26,7 +28,7 @@ describe('URL', () => {
         expect(getParams().get('bar')).toBe('baz')
       })
       test('keeps the URL hash when setting data', () => {
-        window.history.pushState({}, '', '/url/#hash')
+        setActiveURL('/url/#hash')
         urlAdapter.set('foo', 'bar')
         expect(getHash()).toEqual('#hash')
       })
