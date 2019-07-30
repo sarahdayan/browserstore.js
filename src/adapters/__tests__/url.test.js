@@ -22,13 +22,13 @@ describe('URL', () => {
       })
 
       test('keeps the url hash when setting data', () => {
-        window.history.pushState({}, 'hash_url', '/url/#hash')
+        window.history.pushState({}, '', '/url/#hash')
         urlAdapter.set('foo', 'bar')
 
         expect(window.location.href).toEqual('http://localhost/url/#hash?foo=bar')
 
         // We have to reset the window location to prevent other tests from having the /url/#hash as active location
-        window.history.pushState({}, 'hash_url', '/')
+        window.history.pushState({}, '', '/')
       })
 
       test('does not add the hash when setting data if no hash is present', () => {
