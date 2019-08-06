@@ -2,8 +2,10 @@ import urlAdapter from '../url'
 
 const getParams = () =>
   new URLSearchParams(new URL(window.location.href).search)
-const persist = (params = '') =>
-  window.history.pushState({}, '', `${window.location.pathname}?${params}`)
+const getHash = () =>
+  window.location.hash
+const persist = (params = '', hash = '') =>
+  window.history.pushState({}, '', `${window.location.pathname}?${params}${hash}`)
 
 beforeEach(() => persist())
 
@@ -19,6 +21,15 @@ describe('URL', () => {
       test('sets data by key in the storage', () => {
         urlAdapter.set('bar', 'baz')
         expect(getParams().get('bar')).toBe('baz')
+      })
+      test('keeps the URL hash when setting data', () => {
+        persist('', '#hash')
+        urlAdapter.set('foo', 'bar')
+        expect(getHash()).toEqual('#hash')
+      })
+      test('does not add the hash when setting data if no hash is present', () => {
+        urlAdapter.set('foo', 'bar')
+        expect(getHash()).toEqual('')
       })
     })
     describe('#remove', () => {
