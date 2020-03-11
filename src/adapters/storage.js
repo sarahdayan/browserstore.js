@@ -19,8 +19,14 @@ export default storage => {
         return data
       }
     },
+    onGetError(error) {
+      throw error
+    },
     beforeSet(data) {
       return typeof data === 'string' ? data : JSON.stringify(data)
+    },
+    onSetError(error) {
+      throw error
     }
   }
 }

@@ -75,4 +75,55 @@ describe('createStore', () => {
       expect(localStorage.getItem('browserstore_foo')).toBeNull()
     })
   })
+
+  const getMock = jest.fn((error, key) => {
+    if (key !== 'error') throw error
+  })
+  const setMock = jest.fn((error, key, data) => {
+    if (key !== 'error') throw error
+  })
+  const errorStoreAdapter = {
+    get(key) {
+      if (key === 'error') throw Error('Error getting key')
+    },
+    set(key, value) {
+      if (key === 'error') throw Error('Error setting key')
+    },
+    clear() {},
+    afterGet() {},
+    onGetError(error, key) {
+      getMock(error, key)
+    },
+    beforeSet(data) { return data },
+    onSetError(error, key, data) {
+      setMock(error, key, data)
+    },
+  }
+  const errorStore = createStore(errorStoreAdapter)
+
+  describe('#onGetError', () => {
+    test('does not call onGetError when there is no error', () => {
+      expect(errorStore.get('noError')).toBe(undefined)
+    })
+    test('does call onGetError when there is an error', () => {
+      errorStore.get('error')
+
+      expect(getMock.mock.calls.length).toBe(1);
+      expect(typeof getMock.mock.calls[0][0]).toBe('object');
+      expect(getMock.mock.calls[0][1]).toBe('error');
+    })
+  })
+  describe('#onSetError', () => {
+    test('does not call onSetError when there is no error', () => {
+      expect(errorStore.set('noError', 'bar')).toBe(undefined)
+    })
+    test('does call onSetError when there is an error', () => {
+      errorStore.set('error', 'foo')
+
+      expect(setMock.mock.calls.length).toBe(1);
+      expect(typeof setMock.mock.calls[0][0]).toBe('object');
+      expect(setMock.mock.calls[0][1]).toBe('error');
+      expect(setMock.mock.calls[0][2]).toBe('foo');
+    })
+  })
 })
