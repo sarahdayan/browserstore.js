@@ -30,7 +30,7 @@ export default (
           } catch (e) {
             if (!onGetError) throw e
 
-            return onGetError(e, namespace + key)
+            return onGetError(e, key)
           }
         },
         ...(afterGet ? [afterGet] : [])
@@ -45,7 +45,7 @@ export default (
           } catch (e) {
             if (!onSetError) throw e
 
-            return onSetError(e, namespace + key, data)
+            return onSetError(e, key, data)
 
           }
         }
@@ -57,7 +57,7 @@ export default (
       } catch (e) {
         if(!onRemoveError) throw e
 
-        return onRemoveError(e, namespace + key)
+        return onRemoveError(e, key)
       }
     },
     clear() {
