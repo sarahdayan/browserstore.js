@@ -21,10 +21,10 @@ const errorStoreAdapter = {
   remove(key) { throw Error('Error removing key') },
   afterGet() {},
   beforeSet(data) { return data },
-  onGetError(error, key) { errorHandler(error, key) },
-  onSetError(error, key, data) { errorHandler(error, key, data) },
-  onRemoveError(error, key) { errorHandler(error, key) },
-  onClearError(error) { errorHandler(error) },
+  onGetError(err, key) { errorHandler(err, key) },
+  onSetError(err, key, data) { errorHandler(err, key, data) },
+  onRemoveError(err, key) { errorHandler(err, key) },
+  onClearError(err) { errorHandler(err) },
 }
 const errorStore = createStore(errorStoreAdapter)
 
@@ -94,25 +94,25 @@ describe('createStore', () => {
     })
   })
   describe('#onGetError', () => {
-    test('does call onGetError when there is an error', () => {
+    test('calls error handler when there is an error', () => {
       errorStore.get('error')
       expect(errorHandler).toBeCalledTimes(1)
     })
   })
   describe('#onSetError', () => {
-    test('does call onGetError when there is an error', () => {
+    test('calls error handler when there is an errorr', () => {
       errorStore.set('error', 'error')
       expect(errorHandler).toBeCalledTimes(1)
     })
   })
   describe('#onClearError', () => {
-    test('does call onClearError when there is an error', () => {
+    test('calls error handler when there is an error', () => {
       errorStore.clear()
       expect(errorHandler).toBeCalledTimes(1)
     })
   })
   describe('#onRemoveError', () => {
-    test('does call onRemoveError when there is an error', () => {
+    test('calls error handler when there is an error', () => {
       errorStore.remove('error')
       expect(errorHandler).toBeCalledTimes(1)
     })

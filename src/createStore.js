@@ -27,10 +27,10 @@ export default (
         key => {
           try {
             return get(namespace + key)
-          } catch (e) {
-            if (!onGetError) throw e
+          } catch (err) {
+            if (!onGetError) throw err
 
-            return onGetError(e, key)
+            return onGetError(err, key)
           }
         },
         ...(afterGet ? [afterGet] : [])
@@ -42,11 +42,10 @@ export default (
         data => {
           try {
             if (!shouldIgnore(key)) return set(namespace + key, data)
-          } catch (e) {
-            if (!onSetError) throw e
+          } catch (err) {
+            if (!onSetError) throw err
 
-            return onSetError(e, key, data)
-
+            return onSetError(err, key, data)
           }
         }
       )(value)
@@ -54,19 +53,19 @@ export default (
     remove(key) {
       try {
         return remove(namespace + key)
-      } catch (e) {
-        if(!onRemoveError) throw e
+      } catch (err) {
+        if(!onRemoveError) throw err
 
-        return onRemoveError(e, key)
+        return onRemoveError(err, key)
       }
     },
     clear() {
       try {
         clear()
-      } catch (e) {
-        if(!onClearError) throw e
+      } catch (err) {
+        if(!onClearError) throw err
 
-        return onClearError(e)
+        return onClearError(err)
       }
     }
   }
