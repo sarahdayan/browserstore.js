@@ -13,7 +13,25 @@ const storeWithIgnore = storeFactory({ ignore: ['bar', 'baz'] })
 const storeWithOnly = storeFactory({ only: ['foo'] })
 const storeWithConflicts = storeFactory({ only: ['bar'], ignore: ['bar'] })
 
-beforeEach(() => localStorage.clear())
+const errorHandler = jest.fn()
+const errorStoreAdapter = {
+  get(key) { throw Error('Error getting key') },
+  set(key, value) { throw Error('Error setting key') },
+  clear() {throw Error('Error clearing storage') },
+  remove(key) { throw Error('Error removing key') },
+  afterGet() {},
+  beforeSet(data) { return data },
+  onGetError(error, key) { errorHandler(error, key) },
+  onSetError(error, key, data) { errorHandler(error, key, data) },
+  onRemoveError(error, key) { errorHandler(error, key) },
+  onClearError(error) { errorHandler(error) },
+}
+const errorStore = createStore(errorStoreAdapter)
+
+beforeEach(() => {
+  localStorage.clear()
+  errorHandler.mockReset()
+})
 
 describe('createStore', () => {
   describe('#get', () => {
@@ -75,55 +93,28 @@ describe('createStore', () => {
       expect(localStorage.getItem('browserstore_foo')).toBeNull()
     })
   })
-
-  const getMock = jest.fn((error, key) => {
-    if (key !== 'error') throw error
-  })
-  const setMock = jest.fn((error, key, data) => {
-    if (key !== 'error') throw error
-  })
-  const errorStoreAdapter = {
-    get(key) {
-      if (key === 'error') throw Error('Error getting key')
-    },
-    set(key, value) {
-      if (key === 'error') throw Error('Error setting key')
-    },
-    clear() {},
-    afterGet() {},
-    onGetError(error, key) {
-      getMock(error, key)
-    },
-    beforeSet(data) { return data },
-    onSetError(error, key, data) {
-      setMock(error, key, data)
-    },
-  }
-  const errorStore = createStore(errorStoreAdapter)
-
   describe('#onGetError', () => {
-    test('does not call onGetError when there is no error', () => {
-      expect(errorStore.get('noError')).toBe(undefined)
-    })
     test('does call onGetError when there is an error', () => {
       errorStore.get('error')
-
-      expect(getMock.mock.calls.length).toBe(1);
-      expect(typeof getMock.mock.calls[0][0]).toBe('object');
-      expect(getMock.mock.calls[0][1]).toBe('error');
+      expect(errorHandler).toBeCalledTimes(1)
     })
   })
   describe('#onSetError', () => {
-    test('does not call onSetError when there is no error', () => {
-      expect(errorStore.set('noError', 'bar')).toBe(undefined)
+    test('does call onGetError when there is an error', () => {
+      errorStore.set('error', 'error')
+      expect(errorHandler).toBeCalledTimes(1)
     })
-    test('does call onSetError when there is an error', () => {
-      errorStore.set('error', 'foo')
-
-      expect(setMock.mock.calls.length).toBe(1);
-      expect(typeof setMock.mock.calls[0][0]).toBe('object');
-      expect(setMock.mock.calls[0][1]).toBe('error');
-      expect(setMock.mock.calls[0][2]).toBe('foo');
+  })
+  describe('#onClearError', () => {
+    test('does call onClearError when there is an error', () => {
+      errorStore.clear()
+      expect(errorHandler).toBeCalledTimes(1)
+    })
+  })
+  describe('#onRemoveError', () => {
+    test('does call onRemoveError when there is an error', () => {
+      errorStore.remove('error')
+      expect(errorHandler).toBeCalledTimes(1)
     })
   })
 })
