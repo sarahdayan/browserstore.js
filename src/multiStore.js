@@ -2,11 +2,10 @@
  * Creates a multi-store
  *
  * @param {store[]} stores - The stores to sync.
- * @param {object} [errorHandlers] - Functions to override the error handling behavior.
- * @param {function} [errorHandlers.onGetError] - A function to execute if a store errors when getting a value.
- * @param {function} [errorHandlers.onSetError] - A function to execute if a store errors when setting a value.
- * @param {function} [errorHandlers.onClearError] - A function to execute if a store errors when clearing all values.
- * @param {function} [errorHandlers.onRemoveError] - A function to execute if a store errors when removing a value.
+ * @param {function} [options.onGetError] - A callback to execute if a store errors when getting a value.
+ * @param {function} [options.onSetError] - A callback to execute if a store errors when setting a value.
+ * @param {function} [options.onClearError] - A callback to execute if a store errors when clearing all values.
+ * @param {function} [options.onRemoveError] - A callback to execute if a store errors when removing a value.
  *
  * @returns {object}
  */
@@ -27,10 +26,10 @@ export default (
       for (let i = 0; i < stores.length; i++) {
         try {
           data = stores[i].get(key)
-        } catch (e) {
-          if (!onGetError) throw e
+        } catch (err) {
+          if (!onGetError) throw err
 
-          data = onGetError(key, formatError(e, i))
+          data = onGetError(key, formatError(err, i))
         }
 
         if (data) break
@@ -41,10 +40,10 @@ export default (
       stores.forEach((store, i) => {
         try {
           store.set(key, value)
-        } catch (e) {
-          if (!onSetError) throw e
+        } catch (err) {
+          if (!onSetError) throw err
 
-          onSetError(key, value, formatError(e, i))
+          onSetError(key, value, formatError(err, i))
         }
       })
     },
@@ -52,10 +51,10 @@ export default (
       stores.forEach((store, i) => {
         try {
           store.remove(key)
-        } catch (e) {
-          if (!onRemoveError) throw e
+        } catch (err) {
+          if (!onRemoveError) throw err
 
-          onRemoveError(key, formatError(e, i))
+          onRemoveError(key, formatError(err, i))
         }
       })
     },
@@ -63,10 +62,10 @@ export default (
       stores.forEach((store, i) => {
         try {
           store.clear()
-        } catch (e) {
-          if (!onClearError) throw e
+        } catch (err) {
+          if (!onClearError) throw err
 
-          onClearError(formatError(e, i))
+          onClearError(formatError(err, i))
         }
       })
     }

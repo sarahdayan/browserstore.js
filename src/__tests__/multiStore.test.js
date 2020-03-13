@@ -6,11 +6,12 @@ import { createStore, multiStore } from '../browserstore'
 const getParams = () =>
   new URLSearchParams(new URL(window.location.href).search)
 
+const errorToThrow = Error('This is an error')
 const errorStoreAdapter = {
-  get(key) { throw Error('This is an error') },
-  set(key) { throw Error('This is an error') },
-  remove(key){ throw Error('This is an error')},
-  clear(){ throw Error('This is an error')},
+  get(key) { throw errorToThrow },
+  set(key) { throw errorToThrow },
+  remove(key){ throw errorToThrow},
+  clear(){ throw errorToThrow},
 }
 
 const errorHandler = jest.fn()
@@ -19,10 +20,10 @@ const errorStores = multiStore([
   createStore(errorStoreAdapter, { namespace: 'browserstore_' }),
   createStore(localStorageAdapter, { namespace: 'browserstore_' })
 ], {
-  onGetError(key, e) { errorHandler(key, e) },
-  onSetError(key, data, e) { errorHandler(key, data, e) },
-  onRemoveError(key, e) { errorHandler(key, e) },
-  onClearError(e) { errorHandler(e) },
+  onGetError(key, err) { errorHandler(key, err) },
+  onSetError(key, data, err) { errorHandler(key, data, err) },
+  onRemoveError(key, err) { errorHandler(key, err) },
+  onClearError(err) { errorHandler(err) },
 })
 
 const stores = multiStore([
@@ -53,6 +54,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.get('foo')
       expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toHaveBeenCalledWith('foo', errorToThrow)
     })
   })
   describe('#set', () => {
@@ -69,6 +71,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.set('foo', 'bar')
       expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toHaveBeenCalledWith('foo', 'bar', errorToThrow)
     })
   })
   describe('#remove', () => {
@@ -82,6 +85,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.remove('foo')
       expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toHaveBeenCalledWith('foo', errorToThrow)
     })
   })
   describe('#clear', () => {
@@ -99,6 +103,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.clear()
       expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toHaveBeenCalledWith(errorToThrow)
     })
   })
 })
