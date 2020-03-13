@@ -19,8 +19,6 @@ const errorStoreAdapter = {
   set(key, value) { throw Error('Error setting key') },
   clear() { throw Error('Error clearing storage') },
   remove(key) { throw Error('Error removing key') },
-  afterGet() {},
-  beforeSet(data) { return data },
   onGetError(err, key) { errorHandler(err, key) },
   onSetError(err, key, data) { errorHandler(err, key, data) },
   onRemoveError(err, key) { errorHandler(err, key) },
