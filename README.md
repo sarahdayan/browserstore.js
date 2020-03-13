@@ -275,10 +275,36 @@ const myStorage = {
   remove: key => /* remove data from storage */,
   clear: () => /* clear storage */,
   afterGet: data => /* manipulate data after getting it */,
-  beforeSet: data => /* manipulate data before setting it */
+  beforeSet: data => /* manipulate data before setting it */,
+  onGetError: (err, key) => /* optional. gracefully handle errors occurring when calling `get` */,
+  onSetError: (err, key, data) => /* optional. gracefully handle errors occurring when calling `set` */,
+  onRemoveError: (err, key) => /* optional. gracefully handle errors occurring when calling `remove` */,
+  onClearError: (err, key) => /* optional. gracefully handle errors occurring when calling `clear` */,
 }
 
 const myStore = createStore(myStorage)
+```
+
+## Handling errors
+### Errors in stores
+BrowserStore comes with error handling built-in. 
+You can catch every error thrown by one of the [public methods](#api) by defining `onMethodNameError` methods on your adapter.  
+For example, if the `get` method of an adapter throws an error, the `onGetError` method is called. 
+You can [create custom adapter](#building-your-own-adapter) to gracefully handle these errors.
+
+For example, let's say you try to set a value into the store created from the `localStorageAdapter`, but the `localStorage` is full.
+`localStorage` throws a `QuotaExceededError` when it's full, and you try to write data to it. When this happens, you might want to clear the `localStorage` to be able to save values to it again.
+You can do this by defining the `onSetError` method in your custom adapter, like this:
+```js
+import localStorageAdapter from 'browserstore.js/es/adapters/localStorage'
+
+
+const myLocalStorageAdapter = {...localStorageAdapter, ...{
+  onSetError(err, key, data) {
+    this.clear()
+    localStorage.set(key, data)
+  }
+}}
 ```
 
 ## Using BrowserStore in different environments
