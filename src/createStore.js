@@ -44,7 +44,6 @@ export default (
             if (!shouldIgnore(key)) return set(namespace + key, data)
           } catch (err) {
             if (!onSetError) throw err
-
             return onSetError(err, key, data)
           }
         }
@@ -54,7 +53,7 @@ export default (
       try {
         return remove(namespace + key)
       } catch (err) {
-        if(!onRemoveError) throw err
+        if (!onRemoveError) throw err
 
         return onRemoveError(err, key)
       }
@@ -63,7 +62,7 @@ export default (
       try {
         clear()
       } catch (err) {
-        if(!onClearError) throw err
+        if (!onClearError) throw err
 
         return onClearError(err)
       }

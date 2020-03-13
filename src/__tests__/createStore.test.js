@@ -17,7 +17,7 @@ const errorHandler = jest.fn()
 const errorStoreAdapter = {
   get(key) { throw Error('Error getting key') },
   set(key, value) { throw Error('Error setting key') },
-  clear() {throw Error('Error clearing storage') },
+  clear() { throw Error('Error clearing storage') },
   remove(key) { throw Error('Error removing key') },
   afterGet() {},
   beforeSet(data) { return data },
