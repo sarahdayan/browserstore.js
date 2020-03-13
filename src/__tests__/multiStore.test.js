@@ -10,8 +10,8 @@ const errorToThrow = Error('This is an error')
 const errorStoreAdapter = {
   get(key) { throw errorToThrow },
   set(key) { throw errorToThrow },
-  remove(key){ throw errorToThrow},
-  clear(){ throw errorToThrow},
+  remove(key) { throw errorToThrow },
+  clear() { throw errorToThrow },
 }
 
 const errorHandler = jest.fn()
