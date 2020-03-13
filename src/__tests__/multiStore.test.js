@@ -20,9 +20,9 @@ const errorStores = multiStore([
   createStore(errorStoreAdapter, { namespace: 'browserstore_' }),
   createStore(localStorageAdapter, { namespace: 'browserstore_' })
 ], {
-  onGetError(key, err) { errorHandler(key, err) },
-  onSetError(key, data, err) { errorHandler(key, data, err) },
-  onRemoveError(key, err) { errorHandler(key, err) },
+  onGetError(err, key) { errorHandler(err, key) },
+  onSetError(err, key, data) { errorHandler(err, key, data) },
+  onRemoveError(err, key) { errorHandler(err, key) },
   onClearError(err) { errorHandler(err) },
 })
 
@@ -54,7 +54,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.get('foo')
       expect(errorHandler).toBeCalledTimes(1)
-      expect(errorHandler).toHaveBeenCalledWith('foo', errorToThrow)
+      expect(errorHandler).toHaveBeenCalledWith(errorToThrow, 'foo')
     })
   })
   describe('#set', () => {
@@ -71,7 +71,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.set('foo', 'bar')
       expect(errorHandler).toBeCalledTimes(1)
-      expect(errorHandler).toHaveBeenCalledWith('foo', 'bar', errorToThrow)
+      expect(errorHandler).toHaveBeenCalledWith(errorToThrow, 'foo', 'bar')
     })
   })
   describe('#remove', () => {
@@ -85,7 +85,7 @@ describe('multiStore', () => {
     test('calls the error handler if an error is thrown', () => {
       errorStores.remove('foo')
       expect(errorHandler).toBeCalledTimes(1)
-      expect(errorHandler).toHaveBeenCalledWith('foo', errorToThrow)
+      expect(errorHandler).toHaveBeenCalledWith(errorToThrow, 'foo')
     })
   })
   describe('#clear', () => {

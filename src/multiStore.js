@@ -29,7 +29,7 @@ export default (
         } catch (err) {
           if (!onGetError) throw err
 
-          data = onGetError(key, formatError(err, i))
+          data = onGetError(formatError(err, i), key)
         }
 
         if (data) break
@@ -43,7 +43,7 @@ export default (
         } catch (err) {
           if (!onSetError) throw err
 
-          onSetError(key, value, formatError(err, i))
+          onSetError(formatError(err, i), key, value)
         }
       })
     },
@@ -54,7 +54,7 @@ export default (
         } catch (err) {
           if (!onRemoveError) throw err
 
-          onRemoveError(key, formatError(err, i))
+          onRemoveError(formatError(err, i), key)
         }
       })
     },
