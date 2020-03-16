@@ -14,13 +14,14 @@ const storeWithOnly = storeFactory({ only: ['foo'] })
 const storeWithConflicts = storeFactory({ only: ['bar'], ignore: ['bar'] })
 
 const errorHandler = jest.fn()
+const errorToThrow = Error("Error in adapter")
 const errorStoreAdapter = {
-  get(key) { throw Error('Error getting key') },
-  set(key, value) { throw Error('Error setting key') },
-  clear() { throw Error('Error clearing storage') },
-  remove(key) { throw Error('Error removing key') },
+  get(key) { throw errorToThrow },
+  set(key, value) { throw errorToThrow },
+  clear() { throw errorToThrow },
+  remove(key) { throw errorToThrow },
   onGetError(err, key) { errorHandler(err, key) },
-  onSetError(err, key, data) { errorHandler(err, key, data) },
+  onSetError(err, key, value) { errorHandler(err, key, value) },
   onRemoveError(err, key) { errorHandler(err, key) },
   onClearError(err) { errorHandler(err) },
 }
@@ -94,25 +95,26 @@ describe('createStore', () => {
   describe('#onGetError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.get('error')
-      expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toBeCalledWith(errorToThrow, 'error')
     })
   })
   describe('#onSetError', () => {
     test('calls error handler when there is an error', () => {
-      errorStore.set('error', 'error')
-      expect(errorHandler).toBeCalledTimes(1)
+      errorStore.set('error', 'value')
+      expect(errorHandler).toBeCalledWith(errorToThrow, 'error', 'value')
     })
   })
   describe('#onClearError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.clear()
-      expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toBeCalledWith(errorToThrow)
+
     })
   })
   describe('#onRemoveError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.remove('error')
-      expect(errorHandler).toBeCalledTimes(1)
+      expect(errorHandler).toBeCalledWith(errorToThrow, 'error')
     })
   })
 })

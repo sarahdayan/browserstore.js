@@ -39,12 +39,12 @@ export default (
     set(key, value) {
       return pipe(
         ...(beforeSet ? [beforeSet] : []),
-        data => {
+        value => {
           try {
-            if (!shouldIgnore(key)) return set(namespace + key, data)
+            if (!shouldIgnore(key)) return set(namespace + key, value)
           } catch (err) {
             if (!onSetError) throw err
-            return onSetError(err, key, data)
+            return onSetError(err, key, value)
           }
         }
       )(value)
