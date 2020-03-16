@@ -1,6 +1,6 @@
 {
   "name": "browserstore.js",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Persist data into various browser-based storage systems.",
   "author": "Sarah Dayan",
   "license": "MIT",
