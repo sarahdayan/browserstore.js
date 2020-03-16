@@ -98,7 +98,7 @@ describe('createStore', () => {
     })
   })
   describe('#onSetError', () => {
-    test('calls error handler when there is an errorr', () => {
+    test('calls error handler when there is an error', () => {
       errorStore.set('error', 'error')
       expect(errorHandler).toBeCalledTimes(1)
     })
