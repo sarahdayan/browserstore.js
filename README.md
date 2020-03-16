@@ -302,16 +302,17 @@ const stores = multiStore(
       currentStore.clear()
       return currentStore.set(key)
     },
-    onClearError(err) {
+    onClearError(err, currentStore, nextStore) {
       console.error(err)
     },
-    onRemoveError(err, key) {
+    onRemoveError(err, key, currentStore, nextStore) {
       console.error(err, key)
     }
   }
 )
+```
 
-Each error handling callback exposes the `currentStore` (the store that threw the error) and `nextStore` (the next store in the execution chain).
+Each error handling callback exposes the `currentStore` (the store that threw the error) and `nextStore` (the next store in the execution chain, or `undefined` if the current store is the last in the chain).
 
 ## Using BrowserStore in different environments
 

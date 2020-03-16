@@ -13,13 +13,6 @@ export default (
   stores, 
   { onGetError, onSetError, onClearError, onRemoveError } = {}
 ) => {
-  const formatError = (err, storeIndex) => {
-    err.currentStore = stores[storeIndex]
-    err.nextStore = stores[storeIndex + 1]
-
-    return err
-  }
-
   return {
     get(key) {
       let data = null
@@ -29,7 +22,7 @@ export default (
         } catch (err) {
           if (!onGetError) throw err
 
-          data = onGetError(formatError(err, i), key)
+          data = onGetError(err, key, stores[i], stores[i + 1])
         }
 
         if (data) break
@@ -43,7 +36,7 @@ export default (
         } catch (err) {
           if (!onSetError) throw err
 
-          onSetError(formatError(err, i), key, value)
+          onSetError(err, key, value, stores[i], stores[i + 1])
         }
       })
     },
@@ -54,7 +47,7 @@ export default (
         } catch (err) {
           if (!onRemoveError) throw err
 
-          onRemoveError(formatError(err, i), key)
+          onRemoveError(err, key, stores[i], stores[i + 1])
         }
       })
     },
@@ -65,7 +58,7 @@ export default (
         } catch (err) {
           if (!onClearError) throw err
 
-          onClearError(formatError(err, i))
+          onClearError(err, stores[i], stores[i + 1])
         }
       })
     }
