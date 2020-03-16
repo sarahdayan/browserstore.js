@@ -309,6 +309,38 @@ const myLocalStorageAdapter = {
     }
   }
 }
+```
+
+### Errors in multi-stores
+
+Like stores, multi-stores have built-in error handling methods as well. 
+You can customize the behavior by passing an object as the second parameter when creating your multi-store.
+
+```js
+import localStorageAdapter from 'browserstore.js/es/adapters/localStorage'
+import sessionStorageAdapter from 'browserstore.js/es/adapters/sessionStorage'
+import { createStore, multiStore } from 'browserstore.js'
+const stores = multiStore(
+  [createStore(localStorageAdapter), createStore(sessionStorageAdapter)],
+  {
+    onGetError(err, key, currentStore, nextStore) {
+      return nextStore.get(key)
+    },
+    onSetError(err, key, currentStore, nextStore) {
+      currentStore.clear()
+      return currentStore.set(key)
+    },
+    onClearError(err, currentStore, nextStore) {
+      console.error(err)
+    },
+    onRemoveError(err, key, currentStore, nextStore) {
+      console.error(err, key)
+    }
+  }
+)
+```
+
+Each error handling callback exposes the `currentStore` (the store that threw the error) and `nextStore` (the next store in the execution chain, or `undefined` if the current store is the last in the chain).
 
 ## Using BrowserStore in different environments
 
