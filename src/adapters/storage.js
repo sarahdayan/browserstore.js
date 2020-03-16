@@ -21,6 +21,18 @@ export default storage => {
     },
     beforeSet(data) {
       return typeof data === 'string' ? data : JSON.stringify(data)
-    }
+    },
+    onGetError(err) {
+      throw err
+    },
+    onSetError(err) {
+      throw err
+    },
+    onClearError(err) {
+      throw err
+    },
+    onRemoveError(err) {
+      throw err
+    },
   }
 }

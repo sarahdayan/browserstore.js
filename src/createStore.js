@@ -12,7 +12,7 @@ import pipe from './utils/pipe'
  * @returns {store}
  */
 export default (
-  { get, set, remove, clear, afterGet, beforeSet },
+  { get, set, remove, clear, afterGet, beforeSet, onGetError, onSetError, onRemoveError, onClearError },
   { namespace = '', ignore = [], only = [] } = {}
 ) => {
   const shouldIgnore = key => {
@@ -24,19 +24,48 @@ export default (
   return {
     get(key) {
       return pipe(
-        key => get(namespace + key),
+        key => {
+          try {
+            return get(namespace + key)
+          } catch (err) {
+            if (!onGetError) throw err
+
+            return onGetError(err, key)
+          }
+        },
         ...(afterGet ? [afterGet] : [])
       )(key)
     },
     set(key, value) {
       return pipe(
         ...(beforeSet ? [beforeSet] : []),
-        data => (shouldIgnore(key) ? () => {} : set(namespace + key, data))
+        value => {
+          try {
+            if (!shouldIgnore(key)) return set(namespace + key, value)
+          } catch (err) {
+            if (!onSetError) throw err
+            return onSetError(err, key, value)
+          }
+        }
       )(value)
     },
     remove(key) {
-      remove(namespace + key)
+      try {
+        return remove(namespace + key)
+      } catch (err) {
+        if (!onRemoveError) throw err
+
+        return onRemoveError(err, key)
+      }
     },
-    clear
+    clear() {
+      try {
+        clear()
+      } catch (err) {
+        if (!onClearError) throw err
+
+        return onClearError(err)
+      }
+    }
   }
 }
