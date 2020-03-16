@@ -281,37 +281,37 @@ const myStorage = {
 const myStore = createStore(myStorage)
 ```
 
-##Handling errors
+## Handling errors
+
 ### Errors in multi-stores
-Multi-stores have built-in error handling methods too. 
+
+Like stores, multi-stores have built-in error handling methods as well. 
 You can customize the behavior by passing an object as the second parameter when creating your multi-store.
 
 ```js
 import localStorageAdapter from 'browserstore.js/es/adapters/localStorage'
 import sessionStorageAdapter from 'browserstore.js/es/adapters/sessionStorage'
 import { createStore, multiStore } from 'browserstore.js'
+const stores = multiStore(
+  [createStore(localStorageAdapter), createStore(sessionStorageAdapter)],
+  {
+    onGetError(err, key, currentStore, nextStore) {
+      return nextStore.get(key)
+    },
+    onSetError(err, key, currentStore, nextStore) {
+      currentStore.clear()
+      return currentStore.set(key)
+    },
+    onClearError(err) {
+      console.error(err)
+    },
+    onRemoveError(err, key) {
+      console.error(err, key)
+    }
+  }
+)
 
-const stores = multiStore([
-  createStore(localStorageAdapter),
-  createStore(sessionStorageAdapter)
-], {
-  onGetError(err, key) {
-    return err.nextStore.get(key)
-  },
-  onSetError(err, key) {
-    err.currentStore.clear()
-    return err.nextStore.set(key)
-  },
-  onClearError(err) {
-    // Do nothing and ignore the error
-  },
-  onRemoveError(err, key) {
-    // Do nothing and ignore the error
-  },
-})
-```
-
-BrowserStore will append two properties to the error thrown by a store before it's passed to your callback: the `currentStore` (the store that throws the error), and `nextStore` (the next store in the execution chain).
+Each error handling callback exposes the `currentStore` (the store that threw the error) and `nextStore` (the next store in the execution chain).
 
 ## Using BrowserStore in different environments
 

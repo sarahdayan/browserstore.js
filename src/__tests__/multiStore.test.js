@@ -21,7 +21,7 @@ const errorStores = multiStore([
   createStore(localStorageAdapter, { namespace: 'browserstore_' })
 ], {
   onGetError(err, key) { errorHandler(err, key) },
-  onSetError(err, key, data) { errorHandler(err, key, data) },
+  onSetError(err, key, value) { errorHandler(err, key, value) },
   onRemoveError(err, key) { errorHandler(err, key) },
   onClearError(err) { errorHandler(err) },
 })
