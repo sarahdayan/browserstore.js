@@ -95,26 +95,26 @@ describe('createStore', () => {
   describe('#onGetError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.get('error')
-      expect(errorHandler).toBeCalledWith(errorToThrow, 'error')
+      expect(errorHandler).toHaveBeenNthCalledWith(1, errorToThrow, 'error')
     })
   })
   describe('#onSetError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.set('error', 'value')
-      expect(errorHandler).toBeCalledWith(errorToThrow, 'error', 'value')
+      expect(errorHandler).toHaveBeenNthCalledWith(1, errorToThrow, 'error', 'value')
     })
   })
   describe('#onClearError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.clear()
-      expect(errorHandler).toBeCalledWith(errorToThrow)
+      expect(errorHandler).toHaveBeenNthCalledWith(1, errorToThrow)
 
     })
   })
   describe('#onRemoveError', () => {
     test('calls error handler when there is an error', () => {
       errorStore.remove('error')
-      expect(errorHandler).toBeCalledWith(errorToThrow, 'error')
+      expect(errorHandler).toHaveBeenNthCalledWith(1, errorToThrow, 'error')
     })
   })
 })
