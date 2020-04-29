@@ -19,8 +19,8 @@
     "amd"
   ],
   "devDependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/preset-env": "7.9.5",
+    "@babel/core": "7.9.6",
+    "@babel/preset-env": "7.9.6",
     "babel-jest": "24.9.0",
     "eslint": "5.16.0",
     "jest": "24.9.0",
