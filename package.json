@@ -21,9 +21,9 @@
   "devDependencies": {
     "@babel/core": "7.11.1",
     "@babel/preset-env": "7.11.0",
-    "babel-jest": "24.9.0",
+    "babel-jest": "26.3.0",
     "eslint": "5.16.0",
-    "jest": "24.9.0",
+    "jest": "26.4.2",
     "jest-localstorage-mock": "2.4.3",
     "rollup": "1.32.1",
     "rollup-plugin-babel": "4.4.0",
